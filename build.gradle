@@ -6,6 +6,7 @@ plugins {
   id 'org.cyclonedx.bom' version '1.10.0'
   id 'io.spring.javaformat' version '0.0.43'
   id "io.spring.nohttp" version "0.0.11"
+  id 'pl.allegro.tech.build.axion-release' version '1.18.16'
 }
 
 apply plugin: 'java'
@@ -88,3 +89,43 @@ checkFormatAotTest.enabled = false
 
 formatAot.enabled = false
 formatAotTest.enabled = false
+
+scmVersion {
+  repository {
+    type = 'git'
+    directory = project.rootDir
+  }
+  versionIncrementer('incrementPatch')
+  tag {
+    prefix = 'v'
+  }
+}
+
+
+// Custom task to build the project and open test reports in the default browser
+task buildAndShowTests(dependsOn: ['build']) {
+  group = 'Custom Tasks'
+  description = 'Builds the project and opens the test report in the default web browser.'
+
+  doLast {
+    def testReport = "${buildDir}/reports/tests/test/index.html"
+    if (file(testReport).exists()) {
+      println "Opening test report..."
+      if (System.properties['os.name'].toLowerCase().contains('mac')) {
+        exec {
+          commandLine 'open', testReport
+        }
+      } else if (System.properties['os.name'].toLowerCase().contains('win')) {
+        exec {
+          commandLine 'cmd', '/c', 'start', testReport
+        }
+      } else {
+        exec {
+          commandLine 'xdg-open', testReport
+        }
+      }
+    } else {
+      println "Test report not found at ${testReport}"
+    }
+  }
+}
