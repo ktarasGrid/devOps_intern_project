@@ -93,7 +93,7 @@ formatAotTest.enabled = false
 scmVersion {
   repository {
     type = 'git'
-    directory = project.rootDir
+    directory = project.rootDir.absolutePath
   }
   versionIncrementer('incrementPatch')
   tag {
