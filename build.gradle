@@ -101,6 +101,14 @@ scmVersion {
   }
 }
 
+task printVersion {
+  group = 'Custom Tasks'
+  description = 'Prints the current project version.'
+
+  doLast {
+    println "Current Project Version: ${scmVersion.version}"
+  }
+}
 
 // Custom task to build the project and open test reports in the default browser
 task buildAndShowTests(dependsOn: ['build']) {
