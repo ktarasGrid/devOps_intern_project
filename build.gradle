@@ -7,6 +7,7 @@ plugins {
   id 'io.spring.javaformat' version '0.0.43'
   id "io.spring.nohttp" version "0.0.11"
   id 'pl.allegro.tech.build.axion-release' version '1.18.16'
+  id 'maven-publish'
 }
 
 apply plugin: 'java'
@@ -22,12 +23,25 @@ java {
   sourceCompatibility = JavaVersion.VERSION_17
 }
 
-repositories {
-  maven {
-    url "http://localhost:8081/repository/gradle-proxy/"
-    allowInsecureProtocol = true
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java // Adjust this to match your project type
+    }
   }
-  mavenCentral()
+  repositories {
+    maven {
+      url "http://localhost:8081/repository/gradle-hosted/" // Your Nexus repository URL
+      allowInsecureProtocol = true // If Nexus is running on HTTP
+      credentials {
+        username = 'admin' // Replace with your Nexus username
+        password = 'SuperPassword1!' // Replace with your Nexus password
+      }
+    }
+  }
+}
+repositories {
+  mavenCentral() // Fallback in case Nexus is not configured correctly
 }
 
 ext.checkstyleVersion = "10.20.1"
