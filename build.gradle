@@ -31,7 +31,7 @@ publishing {
   }
   repositories {
     maven {
-      url "http://localhost:8081/repository/gradle-hosted/" // Your Nexus repository URL
+      repositoryUrl = 'git@github.com:ktarasGrid/devOps_intern_project.git'
       allowInsecureProtocol = true // If Nexus is running on HTTP
       credentials {
         username = 'admin' // Replace with your Nexus username
