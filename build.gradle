@@ -148,14 +148,16 @@ formatAotTest.enabled = false
 
 scmVersion {
   repository {
-    type = 'git'
-    directory = project.rootDir.absolutePath
+    directory = project.rootDir
+    remote = 'https://github.com/ktarasGrid/devOps_intern_project.git' // Explicitly set the remote repository URL
   }
-  versionIncrementer('incrementPatch')
-  tag {
-    prefix = 'v'
+  hooks {
+    postRelease {
+      pushOnlyAnnotatedTags()
+    }
   }
 }
+
 
 task printVersion {
   group = 'Custom Tasks'
